@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { changeMetaTags } from '@/utils/seo'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,7 +7,10 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: () => import('@/pages/ClustersDiscord.vue'),
+      meta: {
+        title: 'Discord Clusters'
+      }
     },
     {
       path: '/about',
@@ -18,6 +21,10 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue')
     }
   ]
+})
+
+router.beforeEach((to) => {
+  changeMetaTags(to.meta)
 })
 
 export default router

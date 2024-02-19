@@ -1,6 +1,6 @@
 <template>
   <AppHeader />
-  <div class="h-[3200px] bg-gray-100"></div>
+  <router-view />
 </template>
 
 <script setup>
