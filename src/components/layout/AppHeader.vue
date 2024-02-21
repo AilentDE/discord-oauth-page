@@ -24,8 +24,8 @@
         </div>
         <!-- right mobile -->
         <div class="flex items-center xl:hidden space-x-4">
-          <button type="button">
-            <IconSearch class="mr-2 fill-[#BDBDBD] hover:fill-gray-500" />
+          <button type="button" @click.prevent="toggleSubBar('search')">
+            <IconSearch class="w-5 h-5 mr-2 fill-[#BDBDBD] hover:fill-gray-500" />
           </button>
           <button type="button">
             <IconAlarm class="w-8 h-8 fill-[#BDBDBD] hover:fill-gray-500" />
@@ -62,7 +62,10 @@
       </div>
     </div>
     <!-- mobile search bar -->
-    <div class="container mx-auto px-4 md:px-6 pb-2 -pt-1 xl:hidden">
+    <div
+      class="container mx-auto px-4 md:px-6 pb-2 -pt-1 xl:hidden"
+      v-show="showSubBar === 'search'"
+    >
       <div class="flex px-3 py-2 bg-gray-100 rounded">
         <button @click="search">
           <IconSearch class="mr-2 fill-[#BDBDBD] hover:fill-gray-500" />
@@ -89,6 +92,15 @@ const open = ref(false)
 const toggle = () => {
   open.value = !open.value
   console.log(open.value)
+}
+
+const showSubBar = ref(null)
+const toggleSubBar = (val) => {
+  if (showSubBar.value == val) {
+    showSubBar.value = null
+  } else {
+    showSubBar.value = val
+  }
 }
 
 const searchKeyWord = ref('')
