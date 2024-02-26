@@ -47,10 +47,18 @@
             />
           </div>
           <div class="relative">
-            <button type="button" class="mr-3" @click.prevent="toggleSubBar('notificationBar')" @blur="toggleSubBar(null)">
+            <button
+              type="button"
+              class="mr-3"
+              @click.prevent="toggleSubBar('notificationBar')"
+              @blur="toggleSubBar(null)"
+            >
               <IconAlarm class="size-8 fill-[#BDBDBD] hover:fill-gray-500" />
             </button>
-            <div class="absolute left-auto right-0 top-full w-80 rounded-xl border border-gray-lighter bg-white shadow-sm container text-sm" v-show="showSubBar === 'notificationBar'">
+            <div
+              class="absolute left-auto right-0 top-full w-80 rounded-xl border border-gray-lighter bg-white shadow-sm container text-sm"
+              v-show="showSubBar === 'notificationBar'"
+            >
               <div class="flex justify-between">
                 <div class="py-2 font-medium text-left">通知停用中</div>
               </div>
@@ -65,22 +73,32 @@
             >
               發布
             </button>
-            <div class="absolute -left-8 top-full w-40 py-3 flex flex-col rounded-xl border border-gray-lighter bg-white shadow-sm" v-show="showSubBar === 'publish'">
+            <div
+              class="absolute -left-8 top-full w-40 py-3 flex flex-col rounded-xl border border-gray-lighter bg-white shadow-sm"
+              v-show="showSubBar === 'publish'"
+            >
               <div class="divide-y devide-gray-lighter space-y-2">
-                  <ul class="text-gray text-sm">
-                    <li class="py-3 px-4 hover:text-black">插畫</li>
-                    <li class="py-3 px-4 hover:text-black">Cosplay</li>
-                    <li class="py-3 px-4 hover:text-black">聲音創作</li>
-                  </ul>
-                  <ul class="text-gray text-sm">
-                    <li class="py-3 px-4 hover:text-black">新增創作領域</li>
-                  </ul>
-                </div>
+                <ul class="text-gray text-sm">
+                  <li class="py-3 px-4 hover:text-black">插畫</li>
+                  <li class="py-3 px-4 hover:text-black">Cosplay</li>
+                  <li class="py-3 px-4 hover:text-black">聲音創作</li>
+                </ul>
+                <ul class="text-gray text-sm">
+                  <li class="py-3 px-4 hover:text-black">新增創作領域</li>
+                </ul>
+              </div>
             </div>
           </div>
           <div class="relative ml-5">
-            <button class="size-10 rounded-full bg-gray-600 border-none" @click.prevent="toggleSubBar('sideBar')" @blur="toggleSubBar(null)"></button>
-            <div class="absolute right-0 top-full w-54 rounded-xl border border-gray-lighter bg-white shadow-sm" v-show="showSubBar === 'sideBar'">
+            <button
+              class="size-10 rounded-full bg-gray-600 border-none"
+              @click.prevent="toggleSubBar('sideBar')"
+              @blur="toggleSubBar(null)"
+            ></button>
+            <div
+              class="absolute right-0 top-full w-54 rounded-xl border border-gray-lighter bg-white shadow-sm"
+              v-show="showSubBar === 'sideBar'"
+            >
               <div class="flex items-center space-x-1 px-3 py-2">
                 <div class="size-10 rounded-full bg-gray-600 shrink-0"></div>
                 <div class="font-bold line-clamp-1">User Name</div>
@@ -141,6 +159,31 @@
       >
         發布
       </button>
+      <Teleport to="body">
+        <base-dialog :show="showDialog" title="選擇創作領域" @close="handleDialog">
+          <div class="flex flex-col justify-center">
+            <div class="flex flex-row flex-wrap pb-6 gap-x-4 justify-center">
+              <div
+                class="inline-flex size-18 bg-gray-lightest rounded-lg justify-center items-center text-xs text-gray-darker"
+              >
+                聲音創作
+              </div>
+              <div
+                class="inline-flex size-18 bg-gray-lightest rounded-lg justify-center items-center text-xs text-gray-darker"
+              >
+                插畫
+              </div>
+              <div
+                class="inline-flex size-18 bg-gray-lightest rounded-lg justify-center items-center text-xs text-gray-darker"
+              >
+                COSPLAY
+              </div>
+            </div>
+            <div class="border-b border-gray-lighter my-2 px-3"></div>
+            <div class="py-3 px-4 text-sm text-gray-darker">新增創作領域</div>
+          </div>
+        </base-dialog>
+      </Teleport>
       <div class="divide-y devide-gray-lighter">
         <ul class="text-gray text-sm">
           <li class="py-3 hover:text-black">首頁</li>
@@ -201,7 +244,11 @@ const search = () => {
   }
 }
 
+const showDialog = ref(false)
+const handleDialog = () => {
+  showDialog.value = false
+}
 const publish = () => {
-  console.log('publish')
+  showDialog.value = true
 }
 </script>

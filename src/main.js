@@ -5,6 +5,7 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
 import BaseCard from './components/ui/BaseCard.vue'
+import BaseDialog from './components/ui/BaseDialog.vue'
 
 import App from './App.vue'
 import router from './router'
@@ -15,5 +16,6 @@ app.use(createPinia())
 app.use(router)
 
 app.component('base-card', BaseCard)
+app.component('base-dialog', BaseDialog)
 
 app.mount('#app')

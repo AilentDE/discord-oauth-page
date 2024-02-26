@@ -10,8 +10,11 @@ export default {
       }
     },
     extend: {
+      size: {
+        18: '4.5rem'
+      },
       width: {
-        '54': '13.5rem'
+        54: '13.5rem'
       },
       colors: {
         gray: {
