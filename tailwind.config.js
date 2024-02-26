@@ -10,6 +10,9 @@ export default {
       }
     },
     extend: {
+      width: {
+        '54': '13.5rem'
+      },
       colors: {
         gray: {
           lightest: '#f5f5f5',

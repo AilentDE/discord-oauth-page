@@ -46,19 +46,65 @@
               v-model="searchKeyWord"
             />
           </div>
-          <button type="button" class="mr-3">
-            <IconAlarm class="size-8 fill-[#BDBDBD] hover:fill-gray-500" />
-          </button>
-          <button
-            type="button"
-            class="bg-primary border-primary mb-1 px-4 py-2 text-sm text-white justify-center items-center rounded-full border hover:bg-primary-dark hover:border-primary-dark duration-300"
-            @click="publish"
-          >
-            發布
-          </button>
-          <button class="animate-pulse ml-5 mb-1">
-            <div class="size-10 rounded-full bg-gray-600"></div>
-          </button>
+          <div class="relative">
+            <button type="button" class="mr-3" @click.prevent="toggleSubBar('notificationBar')" @blur="toggleSubBar(null)">
+              <IconAlarm class="size-8 fill-[#BDBDBD] hover:fill-gray-500" />
+            </button>
+            <div class="absolute left-auto right-0 top-full w-80 rounded-xl border border-gray-lighter bg-white shadow-sm container text-sm" v-show="showSubBar === 'notificationBar'">
+              <div class="flex justify-between">
+                <div class="py-2 font-medium text-left">通知停用中</div>
+              </div>
+            </div>
+          </div>
+          <div class="relative">
+            <button
+              type="button"
+              class="bg-primary border-primary mb-1 px-4 py-2 text-sm text-white justify-center items-center rounded-full border hover:bg-primary-dark hover:border-primary-dark duration-300"
+              @click.prevent="toggleSubBar('publish')"
+              @blur="toggleSubBar(null)"
+            >
+              發布
+            </button>
+            <div class="absolute -left-8 top-full w-40 py-3 flex flex-col rounded-xl border border-gray-lighter bg-white shadow-sm" v-show="showSubBar === 'publish'">
+              <div class="divide-y devide-gray-lighter space-y-2">
+                  <ul class="text-gray text-sm">
+                    <li class="py-3 px-4 hover:text-black">插畫</li>
+                    <li class="py-3 px-4 hover:text-black">Cosplay</li>
+                    <li class="py-3 px-4 hover:text-black">聲音創作</li>
+                  </ul>
+                  <ul class="text-gray text-sm">
+                    <li class="py-3 px-4 hover:text-black">新增創作領域</li>
+                  </ul>
+                </div>
+            </div>
+          </div>
+          <div class="relative ml-5">
+            <button class="size-10 rounded-full bg-gray-600 border-none" @click.prevent="toggleSubBar('sideBar')" @blur="toggleSubBar(null)"></button>
+            <div class="absolute right-0 top-full w-54 rounded-xl border border-gray-lighter bg-white shadow-sm" v-show="showSubBar === 'sideBar'">
+              <div class="flex items-center space-x-1 px-3 py-2">
+                <div class="size-10 rounded-full bg-gray-600 shrink-0"></div>
+                <div class="font-bold line-clamp-1">User Name</div>
+              </div>
+              <div class="px-4 py-2">
+                <div class="divide-y devide-gray-lighter">
+                  <ul class="text-gray text-sm">
+                    <li class="py-3 hover:text-black">首頁</li>
+                    <li class="py-3 hover:text-black">我的創作者頁面</li>
+                  </ul>
+                  <ul class="text-gray text-sm">
+                    <li class="py-3 hover:text-black">個人檔案</li>
+                    <li class="py-3 hover:text-black">訂閱管理</li>
+                    <li class="py-3 hover:text-black">企劃管理</li>
+                    <li class="py-3 hover:text-black">訂單管理</li>
+                    <li class="py-3 hover:text-black">金流管理</li>
+                  </ul>
+                  <ul class="text-gray text-sm">
+                    <li class="py-3 hover:text-black">返回</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -80,12 +126,12 @@
   </header>
   <!-- mobile side bar -->
   <div
-    class="fixed top-12 bottom-0 left-0 z-30 bg-white shadow-sm w-[13.5rem] py-4 xl:hidden"
+    class="fixed top-12 bottom-0 left-0 z-30 bg-white shadow-sm w-54 py-4 xl:hidden"
     v-show="showSubBar === 'sideBar'"
   >
     <div class="animate-pulse flex items-center space-x-1 px-3 py-2">
-      <div class="size-10 rounded-full bg-gray-600"></div>
-      <div class="font-bold">User Name</div>
+      <div class="size-10 rounded-full bg-gray-600 shrink-0"></div>
+      <div class="font-bold line-clamp-1">User Name</div>
     </div>
     <div class="py-2 px-4">
       <button
