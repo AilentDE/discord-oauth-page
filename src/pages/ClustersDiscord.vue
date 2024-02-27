@@ -74,6 +74,8 @@
 <script setup>
 import { useAuthStore } from '@/stores/auth'
 import { reactive, computed } from 'vue'
+import { changeMetaTags } from '@/utils/seo'
+changeMetaTags({ title: 'Discord身分組管理' })
 
 const authStore = useAuthStore()
 const avatarBorderColor = computed(() => `border-[${authStore.discordUser.banner_color}]`)
