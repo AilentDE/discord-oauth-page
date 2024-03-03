@@ -1,6 +1,6 @@
 <template>
   <teleport to="body">
-    <transition name="dialog">
+    <transition name="fade">
       <dialog open v-if="show">
         <div class="fixed inset-0 bg-black bg-opacity-50 pt-10 z-50">
           <div class="container flex justify-center items-center">
@@ -34,23 +34,23 @@ const props = defineProps({
 const emits = defineEmits(['close'])
 </script>
 
-<style scoped>
-.dialog-enter-from,
-.dialog-leave-to {
+<!-- <style scoped>
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
   transform: scale(0.8);
 }
 
-.dialog-enter-active {
+.fade-enter-active {
   transition: all 0.2s ease-out;
 }
-.dialog-leave-active {
+.fade-leave-active {
   transition: all 0.2s ease-in;
 }
 
-.dialog-enter-to,
-.dialog-leave-from {
+.fade-enter-to,
+.fade-leave-from {
   opacity: 1;
   transform: scale(1);
 }
-</style>
+</style> -->

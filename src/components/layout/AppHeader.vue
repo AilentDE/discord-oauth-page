@@ -127,99 +127,19 @@
       </div>
     </div>
     <!-- mobile search bar -->
-    <div class="container pb-2 -pt-1 xl:hidden" v-show="showSubBar === 'searchBar'">
-      <div class="flex px-3 py-2 bg-gray-100 rounded">
-        <button @click="search">
-          <IconSearch class="mr-2 fill-[#BDBDBD] hover:fill-gray-500" />
-        </button>
-        <input
-          type="text"
-          class="w-full text-xs bg-transparent focus:outline-none"
-          placeholder="請輸入關鍵字"
-          @keydown.enter="search"
-          v-model="searchKeyWord"
-        />
-      </div>
-    </div>
+    <Search
+      :show="showSubBar === 'searchBar'"
+      :search="search"
+      :searchKeyWord="searchKeyWord"
+      @updateKeyWord="updateSearchKeyWord"
+    ></Search>
   </header>
   <!-- mobile side bar -->
-  <div
-    class="fixed top-12 bottom-0 left-0 z-30 bg-white shadow-sm w-54 py-4 xl:hidden"
-    v-show="showSubBar === 'sideBar'"
-  >
-    <div class="animate-pulse flex items-center space-x-1 px-3 py-2">
-      <div class="size-10 rounded-full bg-gray-600 shrink-0"></div>
-      <div class="font-bold line-clamp-1">User Name</div>
-    </div>
-    <div class="py-2 px-4">
-      <button
-        type="button"
-        class="bg-primary border-primary mb-1 px-4 py-2 text-sm text-white justify-center items-center rounded-full w-full border hover:bg-primary-dark hover:border-primary-dark duration-300"
-        @click="publish"
-      >
-        發布
-      </button>
-      <Teleport to="body">
-        <base-dialog :show="showDialog" title="選擇創作領域" @close="handleDialog">
-          <div class="flex flex-col justify-center">
-            <div class="flex flex-row flex-wrap pb-6 gap-x-4 justify-center">
-              <div
-                class="inline-flex size-18 bg-gray-lightest rounded-lg justify-center items-center text-xs text-gray-darker"
-              >
-                聲音創作
-              </div>
-              <div
-                class="inline-flex size-18 bg-gray-lightest rounded-lg justify-center items-center text-xs text-gray-darker"
-              >
-                插畫
-              </div>
-              <div
-                class="inline-flex size-18 bg-gray-lightest rounded-lg justify-center items-center text-xs text-gray-darker"
-              >
-                COSPLAY
-              </div>
-            </div>
-            <div class="border-b border-gray-lighter my-2 px-3"></div>
-            <div class="py-3 px-4 text-sm text-gray-darker">新增創作領域</div>
-          </div>
-        </base-dialog>
-      </Teleport>
-      <div class="divide-y devide-gray-lighter">
-        <ul class="text-gray text-sm">
-          <li class="py-3 hover:text-black">首頁</li>
-          <li class="py-3 hover:text-black">全站探索</li>
-          <li class="py-3 hover:text-black">我的創作者頁面</li>
-        </ul>
-        <ul class="text-gray text-sm">
-          <li class="py-3 hover:text-black">個人檔案</li>
-          <li class="py-3 hover:text-black">訂閱管理</li>
-          <li class="py-3 hover:text-black">企劃管理</li>
-          <li class="py-3 hover:text-black">訂單管理</li>
-          <li class="py-3 hover:text-black">金流管理</li>
-        </ul>
-        <ul class="text-gray text-sm">
-          <li class="py-3 hover:text-black">返回</li>
-        </ul>
-      </div>
-    </div>
-  </div>
+  <SideBar :show="showSubBar === 'sideBar'"></SideBar>
   <!-- mobile notification bar -->
-  <div
-    class="fixed top-12 bottom-0 right-0 z-30 bg-white shadow-sm w-60 py-4 text-sm xl:hidden"
-    v-show="showSubBar === 'notificationBar'"
-  >
-    <div class="container">
-      <div class="flex justify-between">
-        <div class="py-2 font-medium text-left">通知停用中</div>
-      </div>
-    </div>
-  </div>
+  <Notification :show="showSubBar === 'notificationBar'"></Notification>
   <!-- bar background -->
-  <div
-    class="fixed inset-0 z-20 bg-black bg-opacity-50 xl:hidden"
-    v-show="!!showSubBar"
-    @click.prevent="toggleSubBar(null)"
-  ></div>
+  <Background :show="!!showSubBar" :toggleSubBar="toggleSubBar"></Background>
 </template>
 
 <script setup>
@@ -227,6 +147,11 @@ import { ref } from 'vue'
 import IconDiscord from '@/components/icons/IconDiscord.vue'
 import IconSearch from '@/components/icons/IconSearch.vue'
 import IconAlarm from '@/components/icons/IconAlarm.vue'
+
+import SideBar from '@/components/layout/MobileBars/SideBar.vue'
+import Search from './MobileBars/Search.vue'
+import Notification from '@/components/layout/MobileBars/Notification.vue'
+import Background from '@/components/layout/MobileBars/Background.vue'
 
 const showSubBar = ref(null)
 const toggleSubBar = (val) => {
@@ -238,17 +163,12 @@ const toggleSubBar = (val) => {
 }
 
 const searchKeyWord = ref('')
+const updateSearchKeyWord = (data) => {
+  searchKeyWord.value = data
+}
 const search = () => {
   if (searchKeyWord.value != '') {
     console.log('search:', searchKeyWord.value)
   }
-}
-
-const showDialog = ref(false)
-const handleDialog = () => {
-  showDialog.value = false
-}
-const publish = () => {
-  showDialog.value = true
 }
 </script>
