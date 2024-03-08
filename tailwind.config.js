@@ -10,6 +10,9 @@ export default {
       }
     },
     extend: {
+      inset: {
+        17: '4.25rem'
+      },
       size: {
         18: '4.5rem'
       },
