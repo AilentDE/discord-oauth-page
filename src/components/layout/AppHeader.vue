@@ -79,9 +79,13 @@
             >
               <div class="divide-y devide-gray-lighter space-y-2">
                 <ul class="text-gray text-sm">
-                  <li class="py-3 px-4 hover:text-black">插畫</li>
-                  <li class="py-3 px-4 hover:text-black">Cosplay</li>
-                  <li class="py-3 px-4 hover:text-black">聲音創作</li>
+                  <li
+                    v-for="field in authStore.clustersUser.creatorFields"
+                    :key="field"
+                    class="py-3 px-4 hover:text-black"
+                  >
+                    {{ creatorField(field) }}
+                  </li>
                 </ul>
                 <ul class="text-gray text-sm">
                   <li class="py-3 px-4 hover:text-black">新增創作領域</li>
@@ -92,16 +96,35 @@
           <div class="relative ml-5">
             <button
               class="size-10 rounded-full bg-gray-600 border-none"
+              :class="authStore.clustersUser.avatarAssetId ? '' : 'animate-pulse'"
               @click.prevent="toggleSubBar('sideBar')"
               @blur="toggleSubBar(null)"
-            ></button>
+            >
+              <img
+                v-if="authStore.clustersUser.avatarAssetId"
+                class="size-10 rounded-full shrink-0"
+                :src="authStore.clustersAvatarUrl"
+                alt="avatar"
+              />
+            </button>
             <div
               class="absolute right-0 top-full w-54 rounded-xl border border-gray-lighter bg-white shadow-sm"
               v-show="showSubBar === 'sideBar'"
             >
-              <div class="flex items-center space-x-1 px-3 py-2">
-                <div class="size-10 rounded-full bg-gray-600 shrink-0"></div>
-                <div class="font-bold line-clamp-1">User Name</div>
+              <div
+                class="flex items-center space-x-1 px-3 py-2"
+                :class="authStore.clustersUser.avatarAssetId ? '' : 'animate-pulse'"
+              >
+                <img
+                  v-if="authStore.clustersUser.avatarAssetId"
+                  class="size-10 rounded-full shrink-0"
+                  :src="authStore.clustersAvatarUrl"
+                  alt="avatar"
+                />
+                <div v-else class="size-10 rounded-full bg-gray-600 shrink-0"></div>
+                <div class="font-bold line-clamp-1">
+                  {{ authStore.clustersUser.displayName || 'User Name' }}
+                </div>
               </div>
               <div class="px-4 py-2">
                 <div class="divide-y devide-gray-lighter">
@@ -135,7 +158,11 @@
     ></Search>
   </header>
   <!-- mobile side bar -->
-  <SideBar :show="showSubBar === 'sideBar'"></SideBar>
+  <SideBar
+    :show="showSubBar === 'sideBar'"
+    :userData="authStore.clustersUser"
+    :avatarUrl="authStore.clustersAvatarUrl"
+  ></SideBar>
   <!-- mobile notification bar -->
   <Notification :show="showSubBar === 'notificationBar'"></Notification>
   <!-- bar background -->
@@ -143,7 +170,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import IconDiscord from '@/components/icons/IconDiscord.vue'
 import IconSearch from '@/components/icons/IconSearch.vue'
 import IconAlarm from '@/components/icons/IconAlarm.vue'
@@ -152,6 +179,14 @@ import SideBar from '@/components/layout/MobileBars/SideBar.vue'
 import Search from './MobileBars/Search.vue'
 import Notification from '@/components/layout/MobileBars/Notification.vue'
 import Background from '@/components/layout/MobileBars/Background.vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import axiosInstance from '@/utils/requests'
+import creatorField from '@/utils/creatorFieldTranslate'
+
+const route = useRoute()
+const router = useRouter()
+const authStore = useAuthStore()
 
 const showSubBar = ref(null)
 const toggleSubBar = (val) => {
@@ -171,4 +206,16 @@ const search = () => {
     console.log('search:', searchKeyWord.value)
   }
 }
+
+onMounted(async () => {
+  await router.isReady()
+  const apiClient = await axiosInstance()
+  try {
+    const response = await apiClient.post('/session/clusters', route.query)
+    console.log(response)
+    authStore.setClustersUser(response.data.clustersUser)
+  } catch (error) {
+    console.log(error.response.data.message || '登入錯誤')
+  }
+})
 </script>

@@ -8,11 +8,17 @@
             Hi! {{ authStore.discordUser.global_name }}
           </h2>
           <img
+            v-if="authStore.avatarUrl"
             :src="authStore.avatarUrl"
             alt="avatar"
             class="size-20 md:size-40 mx-auto rounded-full border-2 md:border-4 shrink-0"
-            :class="avatarBorderColor"
+            :class="authStore.avatarBorderColor"
           />
+          <div
+            v-else
+            class="animate-pulse size-20 md:size-40 mx-auto rounded-full border-2 md:border-4 shrink-0 bg-gray-600"
+            :class="authStore.avatarBorderColor"
+          ></div>
         </div>
       </base-card>
       <TierRole></TierRole>
@@ -22,11 +28,9 @@
 
 <script setup>
 import { useAuthStore } from '@/stores/auth'
-import { computed } from 'vue'
 import TierRole from '@/components/TierRole.vue'
 import { changeMetaTags } from '@/utils/seo'
 changeMetaTags({ title: 'Discord身分組管理' })
 
 const authStore = useAuthStore()
-const avatarBorderColor = computed(() => `border-[${authStore.discordUser.banner_color}]`)
 </script>

@@ -3,9 +3,18 @@
     class="fixed top-12 bottom-0 left-0 z-30 bg-white shadow-sm w-54 py-4 xl:hidden"
     v-show="show"
   >
-    <div class="animate-pulse flex items-center space-x-1 px-3 py-2">
-      <div class="size-10 rounded-full bg-gray-600 shrink-0"></div>
-      <div class="font-bold line-clamp-1">User Name</div>
+    <div
+      class="flex items-center space-x-1 px-3 py-2"
+      :class="userData.avatarAssetId ? '' : 'animate-pulse'"
+    >
+      <img
+        v-if="userData.avatarAssetId"
+        class="size-10 rounded-full shrink-0"
+        :src="avatarUrl"
+        alt="avatar"
+      />
+      <div v-else class="size-10 rounded-full bg-gray-600 shrink-0"></div>
+      <div class="font-bold line-clamp-1">{{ userData.displayName || 'User Name' }}</div>
     </div>
     <div class="py-2 px-4">
       <button
@@ -19,19 +28,11 @@
         <div class="flex flex-col justify-center">
           <div class="flex flex-row flex-wrap pb-6 gap-x-4 justify-center">
             <div
+              v-for="field in userData.creatorFields"
+              :key="field"
               class="inline-flex size-18 bg-gray-lightest rounded-lg justify-center items-center text-xs text-gray-darker"
             >
-              聲音創作
-            </div>
-            <div
-              class="inline-flex size-18 bg-gray-lightest rounded-lg justify-center items-center text-xs text-gray-darker"
-            >
-              插畫
-            </div>
-            <div
-              class="inline-flex size-18 bg-gray-lightest rounded-lg justify-center items-center text-xs text-gray-darker"
-            >
-              COSPLAY
+              {{ creatorField(field) }}
             </div>
           </div>
           <div class="border-b border-gray-lighter my-2 px-3"></div>
@@ -61,11 +62,20 @@
 
 <script setup>
 import { ref } from 'vue'
+import creatorField from '@/utils/creatorFieldTranslate'
 
 const props = defineProps({
   show: {
     type: Boolean,
     required: true
+  },
+  userData: {
+    type: Object,
+    required: false
+  },
+  avatarUrl: {
+    type: String,
+    required: false
   }
 })
 
