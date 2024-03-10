@@ -214,6 +214,7 @@ onMounted(async () => {
     const response = await apiClient.post('/session/clusters', route.query)
     console.log(response)
     authStore.setClustersUser(response.data.clustersUser)
+    localStorage.setItem('clustersUser', JSON.stringify(response.data.clustersUser))
   } catch (error) {
     console.log(error.response.data.message || '登入錯誤')
   }

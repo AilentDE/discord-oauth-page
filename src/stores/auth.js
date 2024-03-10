@@ -19,6 +19,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const setDiscordUser = (discordUserData) => {
     Object.assign(discordUser, discordUserData)
+    console.log('成功設定discord使用者')
   }
   const discordAvatarUrl = computed(() => {
     if (discordUser.id && discordUser.avatar) {

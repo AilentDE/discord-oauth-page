@@ -8,16 +8,16 @@
             Hi! {{ authStore.discordUser.global_name }}
           </h2>
           <img
-            v-if="authStore.avatarUrl"
-            :src="authStore.avatarUrl"
+            v-if="authStore.discordAvatarUrl"
+            :src="authStore.discordAvatarUrl"
             alt="avatar"
             class="size-20 md:size-40 mx-auto rounded-full border-2 md:border-4 shrink-0"
-            :class="authStore.avatarBorderColor"
+            :class="authStore.discordAvatarBorderColor"
           />
           <div
             v-else
             class="animate-pulse size-20 md:size-40 mx-auto rounded-full border-2 md:border-4 shrink-0 bg-gray-600"
-            :class="authStore.avatarBorderColor"
+            :class="authStore.discordAvatarBorderColor"
           ></div>
         </div>
       </base-card>
@@ -27,10 +27,30 @@
 </template>
 
 <script setup>
-import { useAuthStore } from '@/stores/auth'
+import { onMounted } from 'vue'
 import TierRole from '@/components/TierRole.vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import axiosInstance from '@/utils/requests'
 import { changeMetaTags } from '@/utils/seo'
 changeMetaTags({ title: 'Discord身分組管理' })
 
+const route = useRoute()
+const router = useRouter()
 const authStore = useAuthStore()
+
+onMounted(async () => {
+  await router.isReady()
+  const apiClient = await axiosInstance()
+  try {
+    const response = await apiClient.post('/session/discord', route.query)
+    console.log(response)
+    console.log(response.data.discordUser)
+    localStorage.setItem('accessToken', response.data.accessToken)
+    authStore.setDiscordUser(response.data.discordUser)
+    localStorage.setItem('discordUser', JSON.stringify(response.data.discordUser))
+  } catch (error) {
+    console.log(error.response.data.message || '授權錯誤')
+  }
+})
 </script>
