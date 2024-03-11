@@ -13,12 +13,11 @@ import { useAuthStore } from './stores/auth'
 const authStore = useAuthStore()
 
 const loginCheck = () => {
-  const clustersUserData = JSON.parse(localStorage.clustersUser)
-  const discordUserData = JSON.parse(localStorage.discordUser)
-
+  const clustersUserData = localStorage.clustersUser
+  const discordUserData = localStorage.discordUser
   if (clustersUserData && discordUserData) {
-    authStore.setClustersUser(clustersUserData)
-    authStore.setDiscordUser(discordUserData)
+    authStore.setClustersUser(JSON.parse(clustersUserData))
+    authStore.setDiscordUser(JSON.parse(discordUserData))
   } else {
     console.log('This user have no userData.')
   }

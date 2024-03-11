@@ -21,13 +21,13 @@
           ></div>
         </div>
       </base-card>
-      <TierRole></TierRole>
+      <TierRole :tierRoleData="tierRoleData" :isCreator="isCreator"></TierRole>
     </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, reactive, computed } from 'vue'
 import TierRole from '@/components/TierRole.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
@@ -38,19 +38,33 @@ changeMetaTags({ title: 'Discord身分組管理' })
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
+const isCreator = computed(() => {
+  if (authStore.clustersUser.creatorFields && authStore.clustersUser.creatorFields.length > 0) {
+    return true
+  } else {
+    return false
+  }
+})
+
+const tierRoleData = reactive({})
 
 onMounted(async () => {
   await router.isReady()
   const apiClient = await axiosInstance()
   try {
     const response = await apiClient.post('/session/discord', route.query)
-    console.log(response)
-    console.log(response.data.discordUser)
     localStorage.setItem('accessToken', response.data.accessToken)
     authStore.setDiscordUser(response.data.discordUser)
     localStorage.setItem('discordUser', JSON.stringify(response.data.discordUser))
   } catch (error) {
-    console.log(error.response.data.message || '授權錯誤')
+    console.log(error.response.data.message || '無效的授權')
+  }
+  try {
+    const apiClient = await axiosInstance()
+    const response = await apiClient.get('/discord/tierRole')
+    Object.assign(tierRoleData, response.data)
+  } catch (error) {
+    console.log(error.response.data.message || '身分組設定更新失敗')
   }
 })
 </script>

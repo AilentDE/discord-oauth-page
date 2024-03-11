@@ -212,7 +212,6 @@ onMounted(async () => {
   const apiClient = await axiosInstance()
   try {
     const response = await apiClient.post('/session/clusters', route.query)
-    console.log(response)
     authStore.setClustersUser(response.data.clustersUser)
     localStorage.setItem('clustersUser', JSON.stringify(response.data.clustersUser))
   } catch (error) {

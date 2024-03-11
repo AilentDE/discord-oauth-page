@@ -12,6 +12,9 @@ const axiosInstance = async () => {
       'X-CSRF-TOKEN': csrfToken
     }
   })
+  if (localStorage.accessToken) {
+    axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${localStorage.accessToken}`
+  }
 
   return axiosInstance
 }
