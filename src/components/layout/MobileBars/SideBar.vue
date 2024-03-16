@@ -18,6 +18,7 @@
     </div>
     <div class="py-2 px-4">
       <button
+        v-if="userData.creatorFields?.length > 0"
         type="button"
         class="bg-primary border-primary mb-1 px-4 py-2 text-sm text-white justify-center items-center rounded-full w-full border hover:bg-primary-dark hover:border-primary-dark duration-300"
         @click="sidePublish"
@@ -41,19 +42,34 @@
       </base-dialog>
       <div class="divide-y devide-gray-lighter">
         <ul class="text-gray text-sm">
-          <li class="py-3 hover:text-black">首頁</li>
-          <li class="py-3 hover:text-black">全站探索</li>
-          <li class="py-3 hover:text-black">我的創作者頁面</li>
+          <li class="py-3 hover:text-black"><a :href="clustersUrl">首頁</a></li>
+          <li class="py-3 hover:text-black"><a :href="clustersUrl + '/explore'">全站探索</a></li>
+          <li v-if="userData.creatorFields?.length > 0" class="py-3 hover:text-black">
+            <a :href="`${clustersUrl}/profile/${userData.id}/works`">我的創作者頁面</a>
+          </li>
         </ul>
         <ul class="text-gray text-sm">
-          <li class="py-3 hover:text-black">個人檔案</li>
-          <li class="py-3 hover:text-black">訂閱管理</li>
-          <li class="py-3 hover:text-black">企劃管理</li>
-          <li class="py-3 hover:text-black">訂單管理</li>
-          <li class="py-3 hover:text-black">金流管理</li>
+          <li class="py-3 hover:text-black">
+            <a :href="clustersUrl + '/admin/profile/me'">個人檔案</a>
+          </li>
+          <li class="py-3 hover:text-black">
+            <a :href="clustersUrl + '/admin/subscription'">訂閱管理</a>
+          </li>
+          <li class="py-3 hover:text-black">
+            <a :href="clustersUrl + '/my-project-participations'">企劃管理</a>
+          </li>
+          <li class="py-3 hover:text-black">
+            <a :href="clustersUrl + '/admin/orders'">訂單管理</a>
+          </li>
+          <li v-if="userData.creatorFields?.length > 0" class="py-3 hover:text-black">
+            <a :href="clustersUrl + '/admin/receivables'">金流管理</a>
+          </li>
+        </ul>
+        <ul v-if="userData.creatorFields?.length === 0" class="text-gray text-sm">
+          <li class="py-3 hover:text-black">成為創作者</li>
         </ul>
         <ul class="text-gray text-sm">
-          <li class="py-3 hover:text-black">返回</li>
+          <li class="py-3 hover:text-black"><a :href="clustersUrl">返回</a></li>
         </ul>
       </div>
     </div>
@@ -63,6 +79,8 @@
 <script setup>
 import { ref } from 'vue'
 import creatorField from '@/utils/creatorFieldTranslate'
+
+const clustersUrl = ref(import.meta.env.VITE_CLUSTERS_URL)
 
 const props = defineProps({
   show: {

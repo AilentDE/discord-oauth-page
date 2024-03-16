@@ -8,7 +8,7 @@
           <button type="button" @click.prevent="toggleSubBar('sideBar')">
             <img class="mr-3 xl:hidden" src="@/assets/hamburger.svg" alt="Menu" />
           </button>
-          <a href="https://clusters.tw/" class="flex items-center relative">
+          <a :href="clustersUrl" class="flex items-center relative">
             <img class="w-24 xl:w-40" src="@/assets/logo.svg" alt="Logo" />
             <div class="absolute -right-1 -top-2 size-4">
               <IconDiscord class="fill-[#5562EA]" />
@@ -16,10 +16,10 @@
           </a>
           <ul class="ml-6 items-center hidden xl:flex">
             <li class="px-3 py-2 text-gray hover:text-black">
-              <a href="https://clusters.tw/">首頁</a>
+              <a :href="clustersUrl">首頁</a>
             </li>
             <li class="px-3 py-2 text-gray hover:text-black">
-              <a href="https://clusters.tw/explore">全站探索</a>
+              <a :href="clustersUrl + '/explore'">全站探索</a>
             </li>
           </ul>
         </div>
@@ -64,12 +64,11 @@
               </div>
             </div>
           </div>
-          <div class="relative">
+          <div class="relative" v-if="authStore.clustersUser.creatorFields?.length > 0">
             <button
               type="button"
               class="bg-primary border-primary mb-1 px-4 py-2 text-sm text-white justify-center items-center rounded-full border hover:bg-primary-dark hover:border-primary-dark duration-300"
               @click.prevent="toggleSubBar('publish')"
-              @blur="toggleSubBar(null)"
             >
               發布
             </button>
@@ -84,11 +83,15 @@
                     :key="field"
                     class="py-3 px-4 hover:text-black"
                   >
-                    {{ creatorField(field) }}
+                    <a :href="clustersUrl + '/creator-posts/new?creatorField=' + field">{{
+                      creatorField(field)
+                    }}</a>
                   </li>
                 </ul>
                 <ul class="text-gray text-sm">
-                  <li class="py-3 px-4 hover:text-black">新增創作領域</li>
+                  <li class="py-3 px-4 hover:text-black">
+                    <a :href="clustersUrl + '/add-creator-field'">新增創作領域</a>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -98,7 +101,6 @@
               class="size-10 rounded-full bg-gray-600 border-none"
               :class="authStore.clustersUser.avatarAssetId ? '' : 'animate-pulse'"
               @click.prevent="toggleSubBar('sideBar')"
-              @blur="toggleSubBar(null)"
             >
               <img
                 v-if="authStore.clustersUser.avatarAssetId"
@@ -129,18 +131,46 @@
               <div class="px-4 py-2">
                 <div class="divide-y devide-gray-lighter">
                   <ul class="text-gray text-sm">
-                    <li class="py-3 hover:text-black">首頁</li>
-                    <li class="py-3 hover:text-black">我的創作者頁面</li>
+                    <li class="py-3 hover:text-black"><a :href="clustersUrl">首頁</a></li>
+                    <li
+                      v-if="authStore.clustersUser.creatorFields?.length > 0"
+                      class="py-3 hover:text-black"
+                    >
+                      <a :href="`${clustersUrl}/profile/${authStore.clustersUser.id}/works`"
+                        >我的創作者頁面</a
+                      >
+                    </li>
                   </ul>
                   <ul class="text-gray text-sm">
-                    <li class="py-3 hover:text-black">個人檔案</li>
-                    <li class="py-3 hover:text-black">訂閱管理</li>
-                    <li class="py-3 hover:text-black">企劃管理</li>
-                    <li class="py-3 hover:text-black">訂單管理</li>
-                    <li class="py-3 hover:text-black">金流管理</li>
+                    <li class="py-3 hover:text-black">
+                      <a :href="clustersUrl + '/admin/profile/me'">個人檔案</a>
+                    </li>
+                    <li class="py-3 hover:text-black">
+                      <a :href="clustersUrl + '/admin/subscription'">訂閱管理</a>
+                    </li>
+                    <li class="py-3 hover:text-black">
+                      <a :href="clustersUrl + '/my-project-participations'">企劃管理</a>
+                    </li>
+                    <li class="py-3 hover:text-black">
+                      <a :href="clustersUrl + '/admin/orders'">訂單管理</a>
+                    </li>
+                    <li
+                      v-if="authStore.clustersUser.creatorFields?.length > 0"
+                      class="py-3 hover:text-black"
+                    >
+                      <a :href="clustersUrl + '/admin/receivables'">金流管理</a>
+                    </li>
+                  </ul>
+                  <ul
+                    v-if="authStore.clustersUser.creatorFields?.length === 0"
+                    class="text-gray text-sm"
+                  >
+                    <li class="py-3 hover:text-black">
+                      <a :href="clustersUrl + '/register-as-creator'">成為創作者</a>
+                    </li>
                   </ul>
                   <ul class="text-gray text-sm">
-                    <li class="py-3 hover:text-black">返回</li>
+                    <li class="py-3 hover:text-black"><a :href="clustersUrl">返回</a></li>
                   </ul>
                 </div>
               </div>
@@ -183,6 +213,9 @@ import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import axiosInstance from '@/utils/requests'
 import creatorField from '@/utils/creatorFieldTranslate'
+import qs from 'qs'
+
+const clustersUrl = ref(import.meta.env.VITE_CLUSTERS_URL)
 
 const route = useRoute()
 const router = useRouter()
@@ -203,7 +236,8 @@ const updateSearchKeyWord = (data) => {
 }
 const search = () => {
   if (searchKeyWord.value != '') {
-    console.log('search:', searchKeyWord.value)
+    const params = qs.stringify({ q: searchKeyWord.value }, { addQueryPrefix: true })
+    location.href = `${clustersUrl.value}/search${params}`
   }
 }
 
