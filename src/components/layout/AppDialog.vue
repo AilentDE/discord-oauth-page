@@ -2,23 +2,22 @@
   <transition name="dialog">
     <dialog
       open
-      v-if="showDialog"
-      class="w-full flex justify-between items-center px-4 xl:px-8 py-1 min-h-10 bg-red-400 bg-opacity-90"
+      v-if="dialogStore.showMsg"
+      class="w-full flex justify-between items-center px-4 xl:px-8 py-1 min-h-10"
+      :class="dialogStore.msg.style"
     >
-      <p class="font-extrabold text-black-800">content</p>
-      <IconClose class="cursor-pointer fill-black" @click="closeDialog"></IconClose>
+      <p class="font-extrabold text-black-800">{{ dialogStore.msg.content }}</p>
+      <IconClose class="cursor-pointer fill-black" @click="dialogStore.closeDialog"></IconClose>
     </dialog>
   </transition>
 </template>
 
 <script setup>
-import { ref } from 'vue'
 import IconClose from '../icons/IconClose.vue'
 
-const showDialog = ref(true)
-const closeDialog = () => {
-  showDialog.value = false
-}
+import { useDialogStore } from '@/stores/dialog'
+
+const dialogStore = useDialogStore()
 </script>
 
 <style scoped>

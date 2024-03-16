@@ -25,8 +25,16 @@
       </div>
     </div>
     <div v-else>
-      <h2 class="px-16 mb-8 text-lg md:text-2xl font-bold text-center line-clamp-1">
-        {{ tierRoleData.guild?.name || '正在載入伺服器資訊...' }}
+      <h2
+        v-if="tierRoleData.guild?.name"
+        class="px-16 mb-8 text-lg md:text-2xl font-bold text-center line-clamp-1"
+      >
+        {{ tierRoleData.guild.name }}
+      </h2>
+      <h2 v-else class="px-16 mb-8 text-lg md:text-2xl font-bold text-center line-clamp-1">
+        <div class="flex items-center justify-center">
+          正在載入伺服器資訊... <IconSpinner class="animate-spin size-5 m-2"></IconSpinner>
+        </div>
       </h2>
       <div class="overflow-x-auto border border-l-gray-lighter rounded-xl mb-4">
         <div
@@ -57,7 +65,7 @@
           </div>
         </div>
       </div>
-      <div class="w-full flex items-center justify-center">
+      <div v-if="tierRoleData.guild?.name" class="w-full flex items-center justify-center">
         <div
           class="w-full flex flex-col-reverse md:flex-row md:space-x-12 items-center justify-center"
         >
@@ -81,8 +89,13 @@
 </template>
 
 <script setup>
+import IconSpinner from './icons/IconSpinner.vue'
+
 import axiosInstance from '@/utils/requests'
 import { computed, reactive, watch } from 'vue'
+import { useDialogStore } from '@/stores/dialog'
+
+const dialogStore = useDialogStore()
 
 const props = defineProps({
   tierRoleData: {
@@ -119,7 +132,9 @@ watch(props.tierRoleData, (newVal) => {
 const cancel = () => {
   location.href = 'https://clusters.tw'
 }
-const updateTierRole = async () => {
+const updateTierRole = async (event) => {
+  event.target.disabled = true
+
   const baseRole = props.tierRoleData.guild.roles.filter((role) => role.name == '@everyone')
   let asArray = Object.entries(selected)
   let filtered = asArray.filter(([key, value]) => value != baseRole[0].id)
@@ -128,8 +143,10 @@ const updateTierRole = async () => {
   const apiClient = await axiosInstance()
   try {
     const response = await apiClient.put('/discord/tierRole', filteredSelected)
+    dialogStore.setMsg(response.data.message, 'bg-green-400 bg-opacity-50')
   } catch (error) {
-    console.log(error)
+    dialogStore.setMsg(error.response?.data?.detail || 'error', 'bg-red-400 bg-opacity-90')
   }
+  event.target.disabled = false
 }
 </script>
