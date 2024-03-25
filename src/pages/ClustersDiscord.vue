@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100 mb-auto mt-12 xl:mt-16">
+  <div class="bg-gray-100 min-h-screen mb-auto mt-12 xl:mt-16">
     <div class="container flex flex-col pt-8 md:pt-12 pb-18 md:pb-23 items-center justify-center">
       <base-card>
         <h1 class="text-xl md:text-3xl font-bold text-center mb-8">Discord</h1>
