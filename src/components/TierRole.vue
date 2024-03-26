@@ -65,16 +65,17 @@
           </div>
         </div>
       </div>
-      <div v-if="tierRoleData.guild?.name" class="w-full flex items-center justify-center">
+      <div v-if="tierRoleData.guild?.name" class="w-full flex flex-col items-center justify-center">
         <div
           class="w-full flex flex-col-reverse md:flex-row md:space-x-12 items-center justify-center"
         >
-          <button
-            class="w-full md:w-1/3 bg-white border-primary my-2 px-4 py-2 text-sm text-primary justify-center items-center rounded-full border hover:bg-gray-lighter duration-300"
-            @click="cancel"
+          <a
+            v-if="isCreator && tierRoleData.redirectURL"
+            class="w-full md:w-1/3 bg-white border-primary my-2 px-4 py-2 text-sm text-primary justify-center items-center rounded-full border hover:bg-gray-lighter duration-300 text-center"
+            :href="tierRoleData.redirectURL"
           >
-            返回Clusters
-          </button>
+            變更綁定的伺服器
+          </a>
           <button
             class="w-full md:w-1/3 bg-primary border-primary my-2 px-4 py-2 text-sm text-white justify-center items-center rounded-full border hover:bg-primary-dark hover:border-primary-dark duration-300"
             type="button"
@@ -85,6 +86,10 @@
         </div>
       </div>
     </div>
+    <ul class="mt-2 list-disc">
+      <li>目前只能綁定自己擁有的伺服器(owner)。</li>
+      <li>機器人只能管理權限比自己低的身分組，記得將小可精靈的身分組拉至欲管理的身分組以上。</li>
+    </ul>
   </base-card>
 </template>
 
@@ -130,7 +135,7 @@ watch(props.tierRoleData, (newVal) => {
   Object.assign(selected, newVal.tierRole)
 })
 const cancel = () => {
-  location.href = 'https://clusters.tw'
+  location.href = import.meta.env.VITE_CLUSTERS_URL
 }
 const updateTierRole = async (event) => {
   event.target.disabled = true
