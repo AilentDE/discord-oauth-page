@@ -36,7 +36,7 @@
           正在載入伺服器資訊... <IconSpinner class="animate-spin size-5 m-2"></IconSpinner>
         </div>
       </h2>
-      <div class="overflow-x-auto border border-l-gray-lighter rounded-xl mb-4">
+      <div v-if="tierRoleData.guild?.name" class="overflow-x-auto border border-l-gray-lighter rounded-xl mb-4">
         <div
           class="flex flex-wrap items-center justify-between text-gray text-base font-bold bg-primary-light min-h-9 min-w-fit p-2"
         >
@@ -86,7 +86,7 @@
         </div>
       </div>
     </div>
-    <ul class="mt-2 list-disc">
+    <ul v-show="isCreator" class="mt-2 list-disc">
       <li>目前只能綁定自己擁有的伺服器(owner)。</li>
       <li>機器人只能管理權限比自己低的身分組，記得將小可精靈的身分組拉至欲管理的身分組以上。</li>
     </ul>
