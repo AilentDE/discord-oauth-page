@@ -5,19 +5,19 @@
 </template>
 
 <script setup>
-// import { RouterLink, RouterView } from 'vue-router'
 import AppHeader from './components/layout/AppHeader.vue'
 import AppDialog from './components/layout/AppDialog.vue'
 import { useAuthStore } from './stores/auth'
+import { getUser } from './utils/indexddb'
 
 const authStore = useAuthStore()
 
-const loginCheck = () => {
-  const clustersUserData = localStorage.clustersUser
-  const discordUserData = localStorage.discordUser
+const loginCheck = async () => {
+  const clustersUserData = await getUser('clustersUser')
+  const discordUserData = await getUser(  'discordUser')
   if (clustersUserData && discordUserData) {
-    authStore.setClustersUser(JSON.parse(clustersUserData))
-    authStore.setDiscordUser(JSON.parse(discordUserData))
+    authStore.setClustersUser(clustersUserData)
+    authStore.setDiscordUser(discordUserData)
   } else {
     console.log('This user have no userData.')
   }

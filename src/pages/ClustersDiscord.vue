@@ -33,6 +33,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import axiosInstance from '@/utils/requests'
 import { changeMetaTags } from '@/utils/seo'
+import { setUser } from '@/utils/indexddb'
 changeMetaTags({ title: 'Discord身分組管理' })
 
 const route = useRoute()
@@ -53,9 +54,9 @@ onMounted(async () => {
   const apiClient = await axiosInstance()
   try {
     const response = await apiClient.post('/session/discord', route.query)
-    localStorage.setItem('accessToken', response.data.accessToken)
+    await setUser('accessToken', response.data.accessToken)
     authStore.setDiscordUser(response.data.discordUser)
-    localStorage.setItem('discordUser', JSON.stringify(response.data.discordUser))
+    await setUser('discordUser', response.data.discordUser)
   } catch (error) {
     console.log(error.response.data.message || '無效的授權')
   }

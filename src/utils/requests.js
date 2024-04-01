@@ -1,3 +1,4 @@
+import { getUser } from '@/utils/indexddb'
 import axios from 'axios'
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL + '/discordClusters'
@@ -12,8 +13,9 @@ const axiosInstance = async () => {
       'X-CSRF-TOKEN': csrfToken
     }
   })
-  if (localStorage.accessToken) {
-    axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${localStorage.accessToken}`
+  const accessToken = await getUser('accessToken')
+  if (accessToken != undefined) {
+    axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`
   }
 
   return axiosInstance

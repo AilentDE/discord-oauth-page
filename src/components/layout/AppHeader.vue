@@ -213,6 +213,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import axiosInstance from '@/utils/requests'
 import creatorField from '@/utils/creatorFieldTranslate'
+import { setUser } from '@/utils/indexddb'
 import qs from 'qs'
 
 const clustersUrl = ref(import.meta.env.VITE_CLUSTERS_URL)
@@ -247,7 +248,7 @@ onMounted(async () => {
   try {
     const response = await apiClient.post('/session/clusters', route.query)
     authStore.setClustersUser(response.data.clustersUser)
-    localStorage.setItem('clustersUser', JSON.stringify(response.data.clustersUser))
+    await setUser('clustersUser', response.data.clustersUser)
   } catch (error) {
     console.log(error.response.data.message || '登入錯誤')
   }
