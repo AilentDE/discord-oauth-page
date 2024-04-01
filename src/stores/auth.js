@@ -11,7 +11,8 @@ export const useAuthStore = defineStore('auth', () => {
   }
   const clustersAvatarUrl = computed(() => {
     if (clustersUser.id && clustersUser.avatarAssetId) {
-      return `http://localhost:8000/aws/presignedUrl/file/${clustersUser.id}/${clustersUser.avatarAssetId}`
+      const avatarHost = import.meta.env.VITE_CLUSTERS_URL
+      return `${avatarHost}/aws/presignedUrl/file/${clustersUser.id}/${clustersUser.avatarAssetId}`
     } else {
       return null
     }
