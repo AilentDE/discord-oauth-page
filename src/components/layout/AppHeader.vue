@@ -99,11 +99,11 @@
           <div class="relative ml-5">
             <button
               class="size-10 rounded-full bg-gray-600 border-none"
-              :class="authStore.clustersUser.avatarAssetId ? '' : 'animate-pulse'"
+              :class="authStore.clustersAvatarUrl ? '' : 'animate-pulse'"
               @click.prevent="toggleSubBar('sideBar')"
             >
               <img
-                v-if="authStore.clustersUser.avatarAssetId"
+                v-if="authStore.clustersAvatarUrl"
                 class="size-10 rounded-full shrink-0"
                 :src="authStore.clustersAvatarUrl"
                 alt="avatar"
