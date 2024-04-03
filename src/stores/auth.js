@@ -14,7 +14,7 @@ export const useAuthStore = defineStore('auth', () => {
       const avatarHost = import.meta.env.VITE_API_BASE_URL
       return `${avatarHost}/aws/presignedUrl/file/${clustersUser.id}/${clustersUser.avatarAssetId}`
     } else if (clustersUser.id && clustersUser.avatarAssetId == null) {
-      return '@/assets/default-avatar.jpg'
+      return '/src/assets/default-avatar.jpg'
     } else {
       return null
     }

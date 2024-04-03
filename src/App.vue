@@ -14,7 +14,7 @@ const authStore = useAuthStore()
 
 const loginCheck = async () => {
   const clustersUserData = await getUser('clustersUser')
-  const discordUserData = await getUser(  'discordUser')
+  const discordUserData = await getUser('discordUser')
   if (clustersUserData && discordUserData) {
     authStore.setClustersUser(clustersUserData)
     authStore.setDiscordUser(discordUserData)
