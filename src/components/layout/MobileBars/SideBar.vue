@@ -5,12 +5,18 @@
   >
     <div
       class="flex items-center space-x-1 px-3 py-2"
-      :class="userData.avatarAssetId ? '' : 'animate-pulse'"
+      :class="userData.id ? '' : 'animate-pulse'"
     >
       <img
         v-if="userData.avatarAssetId"
         class="size-10 rounded-full shrink-0"
         :src="avatarUrl"
+        alt="avatar"
+      />
+      <img
+        v-else-if="userData.id"
+        class="size-10 rounded-full shrink-0"
+        src="@/assets/default-avatar.jpg"
         alt="avatar"
       />
       <div v-else class="size-10 rounded-full bg-gray-600 shrink-0"></div>

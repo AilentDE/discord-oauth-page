@@ -99,13 +99,19 @@
           <div class="relative ml-5">
             <button
               class="size-10 rounded-full bg-gray-600 border-none"
-              :class="authStore.clustersAvatarUrl ? '' : 'animate-pulse'"
+              :class="authStore.clustersUser.id ? '' : 'animate-pulse'"
               @click.prevent="toggleSubBar('sideBar')"
             >
               <img
-                v-if="authStore.clustersAvatarUrl"
+                v-if="authStore.clustersUser.avatarAssetId"
                 class="size-10 rounded-full shrink-0"
                 :src="authStore.clustersAvatarUrl"
+                alt="avatar"
+              />
+              <img
+                v-else-if="authStore.clustersUser.id"
+                class="size-10 rounded-full shrink-0"
+                src="@/assets/default-avatar.jpg"
                 alt="avatar"
               />
             </button>
@@ -115,12 +121,18 @@
             >
               <div
                 class="flex items-center space-x-1 px-3 py-2"
-                :class="authStore.clustersUser.avatarAssetId ? '' : 'animate-pulse'"
+                :class="authStore.clustersUser.id ? '' : 'animate-pulse'"
               >
                 <img
                   v-if="authStore.clustersUser.avatarAssetId"
                   class="size-10 rounded-full shrink-0"
                   :src="authStore.clustersAvatarUrl"
+                  alt="avatar"
+                />
+                <img
+                  v-else-if="authStore.clustersUser.id"
+                  class="size-10 rounded-full shrink-0"
+                  src="@/assets/default-avatar.jpg"
                   alt="avatar"
                 />
                 <div v-else class="size-10 rounded-full bg-gray-600 shrink-0"></div>
